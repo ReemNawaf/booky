@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^0.13.3
 
 dev_dependencies:
   flutter_test:
@@ -19,6 +20,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo/
+    - assets/icons/
 
   fonts:
     - family: Tajawal
