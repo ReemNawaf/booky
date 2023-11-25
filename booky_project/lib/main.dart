@@ -1,29 +1,30 @@
+
+
+import 'package:booky_project/home/book_search_screen.dart';
+import 'package:booky_project/service/book_service.dart';
 import 'package:flutter/material.dart';
 import 'package:booky_project/auth/views/splash_view.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options:const FirebaseOptions(
-      apiKey: "AIzaSyAqQl1YJc3q5ar-qcpOtYV59RKzr5g6C9A",
-      projectId: "booky-24220",
-      messagingSenderId: "",
-      appId: "1:162533253910:android:8d90c3eb2904d05853e637",
-    ),
-  );
-  runApp(const MainApp());
+void main() {
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+  final BookService bookService =
+      BookService('AIzaSyAZ63Qzt0AvIXDvfqNmPbyz5bzN-lEGWE8');
 
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SplashView(),
+    return MaterialApp(
+      color: Colors.white,
+      home: Scaffold(
+        body: BookSearchScreen(bookService: bookService),
+      ),
     );
   }
 }
