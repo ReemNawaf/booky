@@ -24,7 +24,6 @@ class SplashView extends StatelessWidget {
                   Padding(
                     padding:  EdgeInsets.only(left:24,top: kToolbarHeight+(MediaQuery.of(context).size.height/3.5)),
                     child: SizedBox(
-                      // height: MediaQuery.of(context).size.height / 1.1,
                       child:
                           Image.asset("assets/logo/light-logo.png"),
                     ),
@@ -36,7 +35,7 @@ class SplashView extends StatelessWidget {
               hasScrollBody: false,
               child: Padding(
                 padding: const EdgeInsets.only(
-                    left:16, right: 16, bottom: kBottomNavigationBarHeight ),
+                    left:16, right: 16, bottom: kBottomNavigationBarHeight),
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: Column(

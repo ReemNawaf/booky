@@ -1,7 +1,4 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:loading_indicator/loading_indicator.dart';
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:booky_project/widgets/primary_button.dart';
 import 'package:booky_project/styles/my_icons.dart';
@@ -19,19 +16,11 @@ class _SignUpViewState extends State<SignUpView> {
   final TextEditingController _passController = TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
-  final FirebaseAuth _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscureText = true;
   bool _isValid = false;
 
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _emailController.dispose();
-    _passController.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +54,7 @@ class _SignUpViewState extends State<SignUpView> {
             onPressed: () => Navigator.pop(context),
           ),
           title: const Text(
+            //TODO: localize text
             "Create an Account",
             textAlign: TextAlign.center,
             style: TextStyle(
@@ -91,21 +81,7 @@ class _SignUpViewState extends State<SignUpView> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       if (_isLoading) ...[
-                        const SizedBox(height: kTextTabBarHeight + 100),
-                        const Center(
-                          child: SizedBox(
-                            height: 50,
-                            width: 150,
-                            child: LoadingIndicator(
-                              indicatorType: Indicator.ballBeat,
-                              colors: [
-                                AppColors.primaryColor,
-                                AppColors.secondaryColor,
-                              ],
-                              strokeWidth: 0.5,
-                            ),
-                          ),
-                        ),
+                      //TODO: add Loading indicator that provided in the README file
                       ] else ...[
                         _title("Full Name"),
                         const SizedBox(height: 4),
@@ -142,11 +118,7 @@ class _SignUpViewState extends State<SignUpView> {
                             //TODO: localize text
                             PrimaryButton(
                               text: "Create an Account",
-                              onPressed: (_formKey.currentState != null &&
-                                          _formKey.currentState!.validate()) &&
-                                      _isValid
-                                  ? _createAccount
-                                  : null,
+                              onPressed: _createAccount,
                             ),
                           ],
                         ),
@@ -173,15 +145,9 @@ class _SignUpViewState extends State<SignUpView> {
 
   Widget _buildName() {
     return TextFormField(
-      key: const ValueKey("Name "),
+      key: const ValueKey("Name"),
       controller: _nameController,
-      validator: (value) {
-        if (value!.isEmpty) {
-            //TODO: localize text
-          return "Name cannot be empty";
-        }
-        return null;
-      },
+      //TODO: add validator
       cursorColor: AppColors.secondaryColor,
       keyboardType: TextInputType.name,
       textInputAction: TextInputAction.next,
@@ -200,7 +166,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
-          //TODO: localize text
+        //TODO: localize text
         hintText: "Full Name",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -224,7 +190,7 @@ class _SignUpViewState extends State<SignUpView> {
       key: const ValueKey("Email"),
       validator: (value) {
         if (value!.isEmpty || !value.contains("@")) {
-            //TODO: localize text
+          //TODO: localize text
           return "Please enter a valid email";
         }
         return null;
@@ -249,7 +215,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
-          //TODO: localize text
+        //TODO: localize text
         hintText: "Email Address",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -273,7 +239,7 @@ class _SignUpViewState extends State<SignUpView> {
       controller: _passController,
       validator: (value) {
         if (value!.isEmpty) {
-            //TODO: localize text
+          //TODO: localize text
           return "Please enter a valid password";
         }
         return null;
@@ -330,53 +296,7 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  void _createAccount() async {
-    if (_isLoading) return;
-    setState(() => _isLoading = true);
-    try {
-      await _auth
-          .createUserWithEmailAndPassword(
-              email: _emailController.text.trim(),
-              password: _passController.text.trim())
-          .then(
-            (value) => ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                backgroundColor: AppColors.secondaryColor,
-                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-                showCloseIcon: true,
-                behavior: SnackBarBehavior.floating,
-                closeIconColor: AppColors.textColorLight,
-                content: Text(
-                    //TODO: localize text
-                  'You have successfully created your account! 🥳',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.textColorLight,
-                  ),
-                ),
-              ),
-            ),
-          );
-      setState(() => _isLoading = false);
-    } on Exception catch (e) {
-      setState(() => _isLoading = false);
-      if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          backgroundColor: AppColors.errorColor,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
-          showCloseIcon: true,
-          behavior: SnackBarBehavior.floating,
-          closeIconColor: Colors.white,
-          content: Text(
-            '$e',
-            style: const TextStyle(
-              fontSize: 12,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      );
-    }
+  void _createAccount() {
+    //TODO: create your account with firebase
   }
 }
