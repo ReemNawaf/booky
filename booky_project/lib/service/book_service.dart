@@ -2,10 +2,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class BookService {
-  final String apiKey;
-
-  BookService(this.apiKey);
-
+ final String apiKey =
+      'AIzaSyAZ63Qzt0AvIXDvfqNmPbyz5bzN-lEGWE8';
   Future<Map<String, dynamic>> searchBooks(String query) async {
     final response = await http.get(
       Uri.parse(

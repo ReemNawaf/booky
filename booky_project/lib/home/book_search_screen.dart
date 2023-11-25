@@ -4,8 +4,7 @@ import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class BookSearchScreen extends StatefulWidget {
-  final BookService bookService;
-  BookSearchScreen({required this.bookService});
+  const BookSearchScreen({super.key});
 
   @override
   _BookSearchScreenState createState() => _BookSearchScreenState();
@@ -18,14 +17,14 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
 
   // functionality
 
-  _searchBooks() {
+  _searchBooks()async {
     final query = _searchController.text.trim();
 
     if (query.isNotEmpty) {
       setState(() {
         _loading = true;
       });
-      widget.bookService.searchBooks(query).then((data) {
+    await  BookService().searchBooks(query).then((data) {
         setState(() {
           _books = data['items'] ?? [];
           _loading = false;

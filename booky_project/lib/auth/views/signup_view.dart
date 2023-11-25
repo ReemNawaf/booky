@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:booky_project/home/book_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_indicator/loading_indicator.dart';
@@ -177,7 +178,7 @@ class _SignUpViewState extends State<SignUpView> {
       controller: _nameController,
       validator: (value) {
         if (value!.isEmpty) {
-            //TODO: localize text
+          //TODO: localize text
           return "Name cannot be empty";
         }
         return null;
@@ -200,7 +201,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
-          //TODO: localize text
+        //TODO: localize text
         hintText: "Full Name",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -224,7 +225,7 @@ class _SignUpViewState extends State<SignUpView> {
       key: const ValueKey("Email"),
       validator: (value) {
         if (value!.isEmpty || !value.contains("@")) {
-            //TODO: localize text
+          //TODO: localize text
           return "Please enter a valid email";
         }
         return null;
@@ -249,7 +250,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
-          //TODO: localize text
+        //TODO: localize text
         hintText: "Email Address",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -273,7 +274,7 @@ class _SignUpViewState extends State<SignUpView> {
       controller: _passController,
       validator: (value) {
         if (value!.isEmpty) {
-            //TODO: localize text
+          //TODO: localize text
           return "Please enter a valid password";
         }
         return null;
@@ -347,7 +348,7 @@ class _SignUpViewState extends State<SignUpView> {
                 behavior: SnackBarBehavior.floating,
                 closeIconColor: AppColors.textColorLight,
                 content: Text(
-                    //TODO: localize text
+                  //TODO: localize text
                   'You have successfully created your account! 🥳',
                   style: TextStyle(
                     fontSize: 12,
@@ -357,6 +358,13 @@ class _SignUpViewState extends State<SignUpView> {
               ),
             ),
           );
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const BookSearchScreen(),
+        ),
+      );
       setState(() => _isLoading = false);
     } on Exception catch (e) {
       setState(() => _isLoading = false);
