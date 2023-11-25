@@ -123,13 +123,11 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-<<<<<<< HEAD
   flutter_web_plugins:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
-=======
   http:
     dependency: "direct main"
     description:
@@ -138,7 +136,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.6"
->>>>>>> 441ea0b46913a81a9ecc5c79b13f58650ed8c075
   http_parser:
     dependency: transitive
     description:
@@ -147,7 +144,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.2"
-<<<<<<< HEAD
   js:
     dependency: transitive
     description:
@@ -156,8 +152,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.7"
-=======
->>>>>>> 441ea0b46913a81a9ecc5c79b13f58650ed8c075
   lints:
     dependency: transitive
     description:
@@ -293,7 +287,4 @@ packages:
     version: "0.3.0"
 sdks:
   dart: ">=3.2.0-194.0.dev <4.0.0"
-<<<<<<< HEAD
   flutter: ">=3.3.0"
-=======
->>>>>>> 441ea0b46913a81a9ecc5c79b13f58650ed8c075

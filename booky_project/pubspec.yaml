@@ -19,6 +19,7 @@ dev_dependencies:
   firebase_core: ^2.23.0
   loading_indicator: ^3.1.1
 
+
 flutter:
   uses-material-design: true
   assets:

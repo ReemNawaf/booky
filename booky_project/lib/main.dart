@@ -1,10 +1,8 @@
 
-
 import 'package:booky_project/home/book_search_screen.dart';
 import 'package:booky_project/service/book_service.dart';
 import 'package:flutter/material.dart';
-import 'package:booky_project/auth/views/splash_view.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 
 void main() {
   runApp(MainApp());
@@ -17,10 +15,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashView(),
-    return MaterialApp(
       color: Colors.white,
       home: Scaffold(
         body: BookSearchScreen(bookService: bookService),

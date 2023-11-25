@@ -41,7 +41,7 @@ class BookDetailsScreen extends StatelessWidget {
                 "Book Details",
               ),
               const Image(
-                image: AssetImage("assets/logo/logo_without_text.png"),
+                image: AssetImage("assets/logo/logo_without_text_light.png"),
                 width: 36,
                 height: 36,
               ),

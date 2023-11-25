@@ -65,7 +65,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
         backgroundColor: Colors.white,
         title: Center(
           child: Image.asset(
-            "assets/logo/logo_without_text.png",
+            "assets/logo/logo_without_text_light.png",
             height: 60,
           ),
         ),
