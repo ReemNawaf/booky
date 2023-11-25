@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:booky_project/auth/views/signup_view.dart';
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:booky_project/widgets/primary_button.dart';
-import 'package:flutter/material.dart';
 
 class SplashView extends StatelessWidget {
   const SplashView({

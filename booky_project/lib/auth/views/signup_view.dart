@@ -1,9 +1,10 @@
 import 'dart:async';
-import 'package:booky_project/styles/my_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:loading_indicator/loading_indicator.dart';
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:booky_project/widgets/primary_button.dart';
+import 'package:booky_project/styles/my_icons.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -18,18 +19,11 @@ class _SignUpViewState extends State<SignUpView> {
   final TextEditingController _passController = TextEditingController();
   final FocusNode _passwordFocusNode = FocusNode();
   final FocusNode _emailFocusNode = FocusNode();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   bool _obscureText = true;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  bool get _isValid =>
-      _nameController.text.isNotEmpty &&
-      _emailController.text.isNotEmpty &&
-      _passController.text.isNotEmpty ;
-  final _formKey = GlobalKey<FormState>();
-  @override
-  void initState() {
-    super.initState();
-  }
+  bool _isValid = false;
 
   @override
   void dispose() {
@@ -41,101 +35,126 @@ class _SignUpViewState extends State<SignUpView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      //TODO: change the background color based on device mode
-      backgroundColor: AppColors.backgroundColorLight,
-      appBar: AppBar(
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
+      child: Scaffold(
+        //TODO: change the background color based on device mode
         backgroundColor: AppColors.backgroundColorLight,
-        automaticallyImplyLeading: false,
-        toolbarHeight: 80,
-        leadingWidth: 80,
-        leading: IconButton(
-          style: ButtonStyle(
-            overlayColor: MaterialStateProperty.all(Colors.white30),
-            elevation: MaterialStateProperty.all(0),
-            padding: MaterialStateProperty.all(
-                const EdgeInsets.only(left: 16, right: 8, top: 12, bottom: 12)),
-            backgroundColor: MaterialStateProperty.all(
-              AppColors.secondaryColor,
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(50),
+        appBar: AppBar(
+          backgroundColor: AppColors.backgroundColorLight,
+          automaticallyImplyLeading: false,
+          toolbarHeight: 80,
+          leadingWidth: 80,
+          leading: IconButton(
+            style: ButtonStyle(
+              overlayColor: MaterialStateProperty.all(Colors.white30),
+              elevation: MaterialStateProperty.all(0),
+              padding: MaterialStateProperty.all(const EdgeInsets.only(
+                  left: 14, right: 6, top: 10, bottom: 10)),
+              backgroundColor: MaterialStateProperty.all(
+                AppColors.secondaryColor,
               ),
-            ),
-          ),
-          icon: const Icon(
-            Icons.arrow_back_ios,
-            size: 24,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          "Create an Account",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: AppColors.textColorLight,
-            fontSize: 24,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-        centerTitle: true,
-      ),
-      body: CustomScrollView(
-        physics: const ClampingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: Form(
-              key: _formKey,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: kBottomNavigationBarHeight,
-                    top: kTextTabBarHeight),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _title("Full Name"),
-                    const SizedBox(height: 4),
-                    _buildName(),
-                    const SizedBox(height: 16),
-                    _title("Email Address"),
-                    const SizedBox(height: 4),
-                    _buildEmail(),
-                    const SizedBox(height: 16),
-                    _title("Password"),
-                    const SizedBox(height: 4),
-                    _buildPassword(),
-                    const SizedBox(height: 16),
-                  ],
+              shape: MaterialStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
                 ),
               ),
             ),
+            icon: const Icon(Icons.arrow_back_ios, size: 22),
+            onPressed: () => Navigator.pop(context),
           ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            child: Padding(
-              padding: const EdgeInsets.only(
-                  left: 16, right: 16, bottom: kBottomNavigationBarHeight),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    //TODO: localize text
-                    PrimaryButton(
-                      text: "Create an Account",
-                      onPressed:_formKey.currentState!=null&& _formKey.currentState!.validate()
-                          ? _createAccount
-                          : null,
+          title: const Text(
+            "Create an Account",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: AppColors.textColorLight,
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          centerTitle: true,
+        ),
+        body: CustomScrollView(
+          physics: const ClampingScrollPhysics(),
+          slivers: [
+            SliverToBoxAdapter(
+              child: Form(
+                key: _formKey,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      left: 16,
+                      right: 16,
+                      bottom: kBottomNavigationBarHeight,
+                      top: kTextTabBarHeight),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (_isLoading) ...[
+                        const SizedBox(height: kTextTabBarHeight + 100),
+                        const Center(
+                          child: SizedBox(
+                            height: 50,
+                            width: 150,
+                            child: LoadingIndicator(
+                              indicatorType: Indicator.ballBeat,
+                              colors: [
+                                AppColors.primaryColor,
+                                AppColors.secondaryColor,
+                              ],
+                              strokeWidth: 0.5,
+                            ),
+                          ),
+                        ),
+                      ] else ...[
+                        _title("Full Name"),
+                        const SizedBox(height: 4),
+                        _buildName(),
+                        const SizedBox(height: 16),
+                        _title("Email Address"),
+                        const SizedBox(height: 4),
+                        _buildEmail(),
+                        const SizedBox(height: 16),
+                        _title("Password"),
+                        const SizedBox(height: 4),
+                        _buildPassword(),
+                        const SizedBox(height: 16),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: _isLoading
+                  ? null
+                  : Padding(
+                      padding: const EdgeInsets.only(
+                          left: 16,
+                          right: 16,
+                          bottom: kBottomNavigationBarHeight),
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            //TODO: localize text
+                            PrimaryButton(
+                              text: "Create an Account",
+                              onPressed: (_formKey.currentState != null &&
+                                          _formKey.currentState!.validate()) &&
+                                      _isValid
+                                  ? _createAccount
+                                  : null,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
-                  ],
-                ),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -155,8 +174,10 @@ class _SignUpViewState extends State<SignUpView> {
   Widget _buildName() {
     return TextFormField(
       key: const ValueKey("Name "),
+      controller: _nameController,
       validator: (value) {
         if (value!.isEmpty) {
+            //TODO: localize text
           return "Name cannot be empty";
         }
         return null;
@@ -179,6 +200,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
+          //TODO: localize text
         hintText: "Full Name",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -198,9 +220,11 @@ class _SignUpViewState extends State<SignUpView> {
 
   Widget _buildEmail() {
     return TextFormField(
+      controller: _emailController,
       key: const ValueKey("Email"),
       validator: (value) {
         if (value!.isEmpty || !value.contains("@")) {
+            //TODO: localize text
           return "Please enter a valid email";
         }
         return null;
@@ -225,6 +249,7 @@ class _SignUpViewState extends State<SignUpView> {
         focusedErrorBorder: OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
+          //TODO: localize text
         hintText: "Email Address",
         hintStyle: TextStyle(
           color: AppColors.subTitle,
@@ -244,95 +269,113 @@ class _SignUpViewState extends State<SignUpView> {
 
   Widget _buildPassword() {
     return TextFormField(
-        key: const ValueKey("Password"),
-        validator: (value) {
-          if (value!.isEmpty || value.length < 7) {
-            return "Please enter a valid password";
-          }
-          return null;
-        },
-        cursorColor: AppColors.secondaryColor,
-        keyboardType: TextInputType.visiblePassword,
-        focusNode: _passwordFocusNode,
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          filled: true,
-          errorStyle:
-              const TextStyle(color: AppColors.errorColor, fontSize: 14),
-          errorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.errorColor),
-          ),
-          focusColor: AppColors.secondaryColor,
-          enabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          focusedErrorBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.errorColor),
-          ),
-          disabledBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.errorColor),
-          ),
-          suffixIcon: GestureDetector(
-            onTap: () {
-              setState(() {
-                _obscureText = !_obscureText;
-              });
-            },
-            child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
-          ),
-          focusedBorder: const OutlineInputBorder(
-            borderSide: BorderSide(color: AppColors.secondaryColor),
-          ),
-          fillColor: AppColors.inputBackgroundColorLight,
-          hintText: "*********",
-          hintStyle: const TextStyle(
-            color: AppColors.subTitle,
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
+      key: const ValueKey("Password"),
+      controller: _passController,
+      validator: (value) {
+        if (value!.isEmpty) {
+            //TODO: localize text
+          return "Please enter a valid password";
+        }
+        return null;
+      },
+      cursorColor: AppColors.secondaryColor,
+      keyboardType: TextInputType.visiblePassword,
+      focusNode: _passwordFocusNode,
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        filled: true,
+        errorStyle: const TextStyle(color: AppColors.errorColor, fontSize: 14),
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorColor),
         ),
-        onSaved: (value) {
-          _passController.text = value!;
-        },
-        obscureText: _obscureText,
-        onEditingComplete: () =>
-            _formKey.currentState!.validate() ? _createAccount() : null);
+        focusColor: AppColors.secondaryColor,
+        enabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.transparent),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorColor),
+        ),
+        disabledBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.errorColor),
+        ),
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: AppColors.secondaryColor),
+        ),
+        fillColor: AppColors.inputBackgroundColorLight,
+        hintText: "*********",
+        hintStyle: const TextStyle(
+          color: AppColors.subTitle,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+      onSaved: (value) {
+        _passController.text = value!;
+      },
+      textInputAction: TextInputAction.done,
+      obscureText: _obscureText,
+      onChanged: (_) {
+        setState(() {
+          _isValid = true;
+        });
+      },
+    );
   }
 
   void _createAccount() async {
-    FocusScope.of(context).unfocus();
     if (_isLoading) return;
     setState(() => _isLoading = true);
     try {
-      if (_formKey.currentState!.validate()) {
-        //TODO: setup the firebase for both Android and ios
-        //   //TODO: enable signin method for email and password in firebase
-         await  _auth
-              .signInWithEmailAndPassword(
-                  email: _emailController.text.trim(),
-                  password: _passController.text.trim())
-              .then((value) =>
-                 ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                  'You have successfully created your account!🥳'),
+      await _auth
+          .createUserWithEmailAndPassword(
+              email: _emailController.text.trim(),
+              password: _passController.text.trim())
+          .then(
+            (value) => ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                backgroundColor: AppColors.secondaryColor,
+                margin: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+                showCloseIcon: true,
+                behavior: SnackBarBehavior.floating,
+                closeIconColor: AppColors.textColorLight,
+                content: Text(
+                    //TODO: localize text
+                  'You have successfully created your account! 🥳',
+                  style: TextStyle(
+                    fontSize: 12,
+                    color: AppColors.textColorLight,
+                  ),
+                ),
+              ),
             ),
-          ),);
-        setState(() => _isLoading = false);
-      } else {
-        setState(() => _isLoading = false);
-        //TODO: instead of snackbar o to success page
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text(
-                'an error has occurred while creating the account, try again!'),
-          ),
-        );
-      }
+          );
+      setState(() => _isLoading = false);
     } on Exception catch (e) {
       setState(() => _isLoading = false);
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('$e')),
+        SnackBar(
+          backgroundColor: AppColors.errorColor,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
+          showCloseIcon: true,
+          behavior: SnackBarBehavior.floating,
+          closeIconColor: Colors.white,
+          content: Text(
+            '$e',
+            style: const TextStyle(
+              fontSize: 12,
+              color: Colors.white,
+            ),
+          ),
+        ),
       );
     }
   }
