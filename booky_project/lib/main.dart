@@ -1,7 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:booky_project/auth/views/splash_view.dart';
-import 'package:booky_project/home/book_search_screen.dart';
-import 'package:booky_project/service/book_service.dart';
 import 'package:flutter/material.dart';
 
 
@@ -20,7 +18,7 @@ Future<void> main() async {
 
 class MainApp extends StatelessWidget {
   const MainApp({super.key});
- 
+
 
   @override
   Widget build(BuildContext context) {

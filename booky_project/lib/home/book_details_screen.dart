@@ -2,14 +2,13 @@ import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
 
 class BookDetailsScreen extends StatelessWidget {
-  final dynamic book;
-
-  BookDetailsScreen({required this.book});
+  // final dynamic book;
+  const BookDetailsScreen();
 
   @override
   Widget build(BuildContext context) {
-    final volumeInfo = book['volumeInfo'];
-    final imageLinks = volumeInfo['imageLinks'];
+    // final volumeInfo = book['volumeInfo'];
+    // final imageLinks = volumeInfo['imageLinks'];
 
     return Scaffold(
       appBar: AppBar(
@@ -52,19 +51,19 @@ class BookDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (imageLinks != null)
-              Container(
-                width: MediaQuery.of(context).size.width,
-                height: 280,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: NetworkImage(
-                      imageLinks['thumbnail'] ?? '',
-                    ),
+            // if (imageLinks != null)
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height: 280,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.fill,
+                  image: NetworkImage(
+                    'https://picsum.photos/250?image=9',
                   ),
                 ),
               ),
+            ),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -72,12 +71,12 @@ class BookDetailsScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 16),
                   Text(
-                    volumeInfo['title'],
+                    "Book title",
                     style: const TextStyle(
                         fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    'Authors: ${volumeInfo['authors']?.join(', ') ?? 'Unknown Author'}',
+                    "Authtor name",
                     style:
                         const TextStyle(fontSize: 14, color: Color(0xFFA39C9C)),
                   ),
@@ -90,7 +89,7 @@ class BookDetailsScreen extends StatelessWidget {
                             TextStyle(fontSize: 16, color: Color(0xFFA39C9C)),
                       ),
                       Text(
-                        ' ${volumeInfo['pageCount'] ?? 'Not available'} pages',
+                        "pageCount",
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -103,7 +102,7 @@ class BookDetailsScreen extends StatelessWidget {
                             TextStyle(fontSize: 16, color: Color(0xFFA39C9C)),
                       ),
                       Text(
-                        '${volumeInfo['language'] ?? 'Not available'}',
+                        'language',
                         style: const TextStyle(fontSize: 16),
                       ),
                     ],
@@ -114,7 +113,7 @@ class BookDetailsScreen extends StatelessWidget {
                     style: TextStyle(fontSize: 16),
                   ),
                   Text(
-                    ' ${volumeInfo['description'] ?? 'No description available.'}',
+                    'description',
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],

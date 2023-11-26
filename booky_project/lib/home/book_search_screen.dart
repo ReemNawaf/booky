@@ -1,7 +1,8 @@
-import 'package:booky_project/home/book_details_screen.dart';
-import 'package:booky_project/service/book_service.dart';
+
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
+
+import 'book_details_screen.dart';
 
 class BookSearchScreen extends StatefulWidget {
   const BookSearchScreen({super.key});
@@ -15,46 +16,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
   List<dynamic> _books = [];
   bool _loading = false;
 
-  // functionality
-
-  _searchBooks()async {
-    final query = _searchController.text.trim();
-
-    if (query.isNotEmpty) {
-      setState(() {
-        _loading = true;
-      });
-    await  BookService().searchBooks(query).then((data) {
-        setState(() {
-          _books = data['items'] ?? [];
-          _loading = false;
-        });
-      }).catchError((error) {
-        print(error);
-        setState(() {
-          _loading = false;
-        });
-      });
-    }
-  }
-
-  query(String query) {
-    if (_searchController.text.trim().isEmpty || query.trim().isEmpty) {
-      setState(() {
-        _books = [];
-      });
-      return;
-    }
-  }
-
-  void _viewBookDetails(dynamic book) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => BookDetailsScreen(book: book),
-      ),
-    );
-  }
+  // TODO: functionality..
 
   @override
   Widget build(BuildContext context) {
@@ -93,17 +55,17 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
                   controller: _searchController,
-                  onChanged: query,
+                  // TODO: onChanged
                   decoration: InputDecoration(
                     suffixIcon: IconButton(
-                      icon: _loading
-                          ? const CircularProgressIndicator(
-                              color: AppColors.primaryColor,
-                              backgroundColor: Colors.white,
-                            )
-                          : const Icon(Icons.search),
-                      onPressed: _loading ? null : _searchBooks,
-                    ),
+                        icon: _loading
+                            ? const CircularProgressIndicator(
+                                color: AppColors.primaryColor,
+                                backgroundColor: Colors.white,
+                              )
+                            : const Icon(Icons.search),
+                        onPressed: _loading ? null : null // Call the function,
+                        ),
                     border: InputBorder.none,
                     hintText: 'Search for a Book...',
                     hintStyle: const TextStyle(
@@ -113,51 +75,58 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                 ),
               ),
             ),
-            _books.length == 0
-                ? Column(
-                    children: [
-                      Image.asset(
-                        "assets/icons/search.png",
-                        height: 350,
+            Column(
+              children: [
+                Column(
+                  children: [
+                    Image.asset(
+                      "assets/icons/search.png",
+                      height: 350,
+                    ),
+                    const Text(
+                      "Start searching for your book",
+                      style: TextStyle(
+                        fontSize: 17,
                       ),
-                      const Text(
-                        "Start searching for your book",
-                        style: TextStyle(
-                          fontSize: 17,
-                        ),
-                      )
-                    ],
-                  )
-                : ListView.builder(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    itemCount: _books.length,
-                    itemBuilder: (context, index) {
-                      final book = _books[index];
-                      final volumeInfo = book['volumeInfo'];
-                      final imageLinks = volumeInfo['imageLinks'];
-                      return ListTile(
-                        title: Text(volumeInfo['title']),
-                        subtitle: Text(
-                          volumeInfo['authors']?.join(', ') ?? 'Unknown Author',
-                          style: TextStyle(color: Color(0xFFA39C9C)),
-                        ),
-                        leading: Container(
-                          width: 50,
-                          height: 150,
-                          child: imageLinks != null
-                              ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: Image.network(
-                                    imageLinks['thumbnail'] ?? '',
-                                  ),
-                                )
-                              : Container(),
-                        ),
-                        onTap: () => _viewBookDetails(book),
-                      );
-                    },
-                  ),
+                    )
+                  ],
+                ),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: 3,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: const Text("Book Title"),
+                      subtitle: const Text(
+                        "Author name",
+                        style: TextStyle(color: Color(0xFFA39C9C)),
+                      ),
+                      leading: Container(
+                        width: 50,
+                        height: 150,
+                        child:
+                        "link" != null
+                            ? ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: Image.network(
+                             'https://picsum.photos/250?image=9',
+                                ),
+                              )
+                            : Container(),
+                      ),
+                      //TODO: go to book details page
+                      onTap: (){
+
+Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => BookDetailsScreen()));
+
+                      },
+                    );
+                  },
+                ),
+              ],
+            )
           ],
         ),
       ),
