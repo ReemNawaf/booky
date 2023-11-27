@@ -1,5 +1,10 @@
+import 'package:booky_project/bloc/locale_bloc/locale_bloc.dart';
+import 'package:booky_project/bloc/theme_bloc/theme_bloc.dart';
 import 'package:booky_project/styles/app_styles.dart';
+import 'package:booky_project/styles/theme/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingView extends StatelessWidget {
   const SettingView({super.key});
@@ -7,7 +12,6 @@ class SettingView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(10),
@@ -21,7 +25,6 @@ class SettingView extends StatelessWidget {
             child: IconButton(
               icon: const Icon(
                 Icons.arrow_back_ios_sharp,
-                color: Colors.black,
                 size: 18,
               ),
               iconSize: 25,
@@ -31,8 +34,7 @@ class SettingView extends StatelessWidget {
             ),
           ),
         ),
-        title: const Text("Settings"),
-        backgroundColor: Colors.white,
+        title: Text(AppLocalizations.of(context)!.settings),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -41,23 +43,37 @@ class SettingView extends StatelessWidget {
           children: [
             Row(
               children: [
-                const Text("Dark Mode"),
+                Text(AppLocalizations.of(context)!.dark),
                 const Spacer(),
-                Switch.adaptive(
-                  activeColor: AppColors.secondaryColor,
-                  value: false,
-                  onChanged: (bool value) {},
+                BlocBuilder<ThemeBloc, ThemeUpdatedState>(
+                  builder: (context, state) {
+                    return Switch.adaptive(
+                      activeColor: AppColors.secondaryColor,
+                      value: state.themeData == darkTheme,
+                      onChanged: (bool value) {
+                        context.read<ThemeBloc>().add(ChangeThemeEvent(value));
+                      },
+                    );
+                  },
                 )
               ],
             ),
             Row(
               children: [
-                const Text("English"),
+                Text(AppLocalizations.of(context)!.english),
                 const Spacer(),
-                Switch.adaptive(
-                  activeColor: AppColors.secondaryColor,
-                  value: true,
-                  onChanged: (bool value) {},
+                BlocBuilder<LocaleBloc, LocaleUpdatedState>(
+                  builder: (context, state) {
+                    return Switch.adaptive(
+                      activeColor: AppColors.secondaryColor,
+                      value: state.locale == const Locale('en'),
+                      onChanged: (bool value) {
+                        context
+                            .read<LocaleBloc>()
+                            .add(ChangeLocaleEvent(value));
+                      },
+                    );
+                  },
                 )
               ],
             )

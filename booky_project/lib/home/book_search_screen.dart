@@ -1,30 +1,32 @@
 import 'package:booky_project/home/book_details_screen.dart';
 import 'package:booky_project/service/book_service.dart';
+import 'package:booky_project/settings/views/settings_view.dart';
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookSearchScreen extends StatefulWidget {
   const BookSearchScreen({super.key});
 
   @override
-  _BookSearchScreenState createState() => _BookSearchScreenState();
+  State<BookSearchScreen> createState() => _BookSearchScreenState();
 }
 
 class _BookSearchScreenState extends State<BookSearchScreen> {
-  TextEditingController _searchController = TextEditingController();
+  final TextEditingController _searchController = TextEditingController();
   List<dynamic> _books = [];
   bool _loading = false;
 
   // functionality
 
-  _searchBooks()async {
+  _searchBooks() async {
     final query = _searchController.text.trim();
 
     if (query.isNotEmpty) {
       setState(() {
         _loading = true;
       });
-    await  BookService().searchBooks(query).then((data) {
+      await BookService().searchBooks(query).then((data) {
         setState(() {
           _books = data['items'] ?? [];
           _loading = false;
@@ -61,24 +63,49 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
-        backgroundColor: Colors.white,
         title: Center(
           child: Image.asset(
             "assets/logo/logo_without_text_light.png",
             height: 60,
           ),
         ),
-        actions: const <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.settings,
-              color: Colors.black,
+        leading: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: AppColors.secondaryColor,
             ),
-            onPressed: null,
+            child: IconButton(
+              icon: const Icon(
+                Icons.arrow_back_ios_sharp,
+                size: 18,
+              ),
+              iconSize: 25,
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+          ),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(
+              Icons.settings,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SettingView(),
+                ),
+              );
+            },
           )
         ],
       ),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -86,9 +113,9 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Container(
                 margin: const EdgeInsets.symmetric(vertical: 8),
-                decoration: const BoxDecoration(
-                  color: Color(0xFFF5F5F5),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.tertiary,
+                  borderRadius: const BorderRadius.all(Radius.circular(5)),
                 ),
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: TextField(
@@ -105,24 +132,21 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                       onPressed: _loading ? null : _searchBooks,
                     ),
                     border: InputBorder.none,
-                    hintText: 'Search for a Book...',
-                    hintStyle: const TextStyle(
-                      color: Color(0xFFA39C9C),
-                    ),
+                    hintText: AppLocalizations.of(context)!.search,
                   ),
                 ),
               ),
             ),
-            _books.length == 0
+            _books.isEmpty
                 ? Column(
                     children: [
                       Image.asset(
                         "assets/icons/search.png",
                         height: 350,
                       ),
-                      const Text(
-                        "Start searching for your book",
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.startSearch,
+                        style: const TextStyle(
                           fontSize: 17,
                         ),
                       )
@@ -130,7 +154,7 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                   )
                 : ListView.builder(
                     shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
+                    physics: const NeverScrollableScrollPhysics(),
                     itemCount: _books.length,
                     itemBuilder: (context, index) {
                       final book = _books[index];
@@ -140,9 +164,9 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                         title: Text(volumeInfo['title']),
                         subtitle: Text(
                           volumeInfo['authors']?.join(', ') ?? 'Unknown Author',
-                          style: TextStyle(color: Color(0xFFA39C9C)),
+                          style: const TextStyle(color: Color(0xFFA39C9C)),
                         ),
-                        leading: Container(
+                        leading: SizedBox(
                           width: 50,
                           height: 150,
                           child: imageLinks != null

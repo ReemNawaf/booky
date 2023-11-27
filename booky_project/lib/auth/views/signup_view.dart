@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'package:booky_project/home/book_search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:loading_indicator/loading_indicator.dart';
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:booky_project/widgets/primary_button.dart';
-import 'package:booky_project/styles/my_icons.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpView extends StatefulWidget {
   const SignUpView({super.key});
@@ -41,35 +40,34 @@ class _SignUpViewState extends State<SignUpView> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
         //TODO: change the background color based on device mode
-        backgroundColor: AppColors.backgroundColorLight,
         appBar: AppBar(
-          backgroundColor: AppColors.backgroundColorLight,
           automaticallyImplyLeading: false,
           toolbarHeight: 80,
-          leadingWidth: 80,
-          leading: IconButton(
-            style: ButtonStyle(
-              overlayColor: MaterialStateProperty.all(Colors.white30),
-              elevation: MaterialStateProperty.all(0),
-              padding: MaterialStateProperty.all(const EdgeInsets.only(
-                  left: 14, right: 6, top: 10, bottom: 10)),
-              backgroundColor: MaterialStateProperty.all(
-                AppColors.secondaryColor,
+          leading: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.secondaryColor,
               ),
-              shape: MaterialStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+              child: IconButton(
+                icon: const Icon(
+                  Icons.arrow_back_ios_sharp,
+                  size: 18,
                 ),
+                iconSize: 25,
+                onPressed: () {
+                  Navigator.pop(context);
+                },
               ),
             ),
-            icon: const Icon(Icons.arrow_back_ios, size: 22),
-            onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
-            "Create an Account",
+          title: Text(
+            AppLocalizations.of(context)!.createAccount,
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.textColorLight,
+            style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.w700,
             ),
@@ -108,15 +106,15 @@ class _SignUpViewState extends State<SignUpView> {
                           ),
                         ),
                       ] else ...[
-                        _title("Full Name"),
+                        _title(AppLocalizations.of(context)!.fullName),
                         const SizedBox(height: 4),
                         _buildName(),
                         const SizedBox(height: 16),
-                        _title("Email Address"),
+                        _title(AppLocalizations.of(context)!.email),
                         const SizedBox(height: 4),
                         _buildEmail(),
                         const SizedBox(height: 16),
-                        _title("Password"),
+                        _title(AppLocalizations.of(context)!.password),
                         const SizedBox(height: 4),
                         _buildPassword(),
                         const SizedBox(height: 16),
@@ -142,7 +140,7 @@ class _SignUpViewState extends State<SignUpView> {
                           children: [
                             //TODO: localize text
                             PrimaryButton(
-                              text: "Create an Account",
+                              text: AppLocalizations.of(context)!.createAccount,
                               onPressed: (_formKey.currentState != null &&
                                           _formKey.currentState!.validate()) &&
                                       _isValid
@@ -160,12 +158,10 @@ class _SignUpViewState extends State<SignUpView> {
     );
   }
 
-  //TODO: localize text
   Widget _title(String title) {
     return Text(
       title,
       style: const TextStyle(
-        color: AppColors.textColorLight,
         fontSize: 18,
         fontWeight: FontWeight.w500,
       ),
@@ -179,7 +175,7 @@ class _SignUpViewState extends State<SignUpView> {
       validator: (value) {
         if (value!.isEmpty) {
           //TODO: localize text
-          return "Name cannot be empty";
+          return AppLocalizations.of(context)!.nameError;
         }
         return null;
       },
@@ -188,30 +184,29 @@ class _SignUpViewState extends State<SignUpView> {
       textInputAction: TextInputAction.next,
       onEditingComplete: () =>
           FocusScope.of(context).requestFocus(_emailFocusNode),
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        filled: true,
-        errorBorder: OutlineInputBorder(
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
         focusColor: AppColors.secondaryColor,
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.transparent),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
         //TODO: localize text
-        hintText: "Full Name",
-        hintStyle: TextStyle(
+        hintText: AppLocalizations.of(context)!.fullName,
+        hintStyle: const TextStyle(
           color: AppColors.subTitle,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.secondaryColor),
         ),
-        fillColor: AppColors.inputBackgroundColorLight,
       ),
       onSaved: (value) {
         _nameController.text = value!;
@@ -226,7 +221,7 @@ class _SignUpViewState extends State<SignUpView> {
       validator: (value) {
         if (value!.isEmpty || !value.contains("@")) {
           //TODO: localize text
-          return "Please enter a valid email";
+          return AppLocalizations.of(context)!.emaileError;
         }
         return null;
       },
@@ -236,31 +231,29 @@ class _SignUpViewState extends State<SignUpView> {
       focusNode: _emailFocusNode,
       onEditingComplete: () =>
           FocusScope.of(context).requestFocus(_passwordFocusNode),
-      decoration: const InputDecoration(
-        border: OutlineInputBorder(),
-        filled: true,
-        errorStyle: TextStyle(color: AppColors.errorColor, fontSize: 14),
-        errorBorder: OutlineInputBorder(
+      decoration: InputDecoration(
+        border: const OutlineInputBorder(),
+        errorStyle: const TextStyle(color: AppColors.errorColor, fontSize: 14),
+        errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
         focusColor: AppColors.secondaryColor,
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.transparent),
         ),
-        focusedErrorBorder: OutlineInputBorder(
+        focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
         ),
         //TODO: localize text
-        hintText: "Email Address",
-        hintStyle: TextStyle(
+        hintText: AppLocalizations.of(context)!.email,
+        hintStyle: const TextStyle(
           color: AppColors.subTitle,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.secondaryColor),
         ),
-        fillColor: AppColors.inputBackgroundColorLight,
       ),
       onSaved: (value) {
         _emailController.text = value!;
@@ -275,7 +268,7 @@ class _SignUpViewState extends State<SignUpView> {
       validator: (value) {
         if (value!.isEmpty) {
           //TODO: localize text
-          return "Please enter a valid password";
+          return AppLocalizations.of(context)!.passwordError;
         }
         return null;
       },
@@ -284,7 +277,6 @@ class _SignUpViewState extends State<SignUpView> {
       focusNode: _passwordFocusNode,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
-        filled: true,
         errorStyle: const TextStyle(color: AppColors.errorColor, fontSize: 14),
         errorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.errorColor),
@@ -310,7 +302,6 @@ class _SignUpViewState extends State<SignUpView> {
         focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: AppColors.secondaryColor),
         ),
-        fillColor: AppColors.inputBackgroundColorLight,
         hintText: "*********",
         hintStyle: const TextStyle(
           color: AppColors.subTitle,
@@ -352,7 +343,6 @@ class _SignUpViewState extends State<SignUpView> {
                   'You have successfully created your account! 🥳',
                   style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textColorLight,
                   ),
                 ),
               ),

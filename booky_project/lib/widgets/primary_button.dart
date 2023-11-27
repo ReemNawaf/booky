@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatefulWidget {
   const PrimaryButton({
-    Key? key,
+    super.key,
     this.text,
     this.child,
     this.onPressed,
-    this.hasBackground=true,
-  }) : super(key: key);
+    this.hasBackground = true,
+  });
 
   /// Text of type String is required for this widget to display the text of the button
   final String? text;
   final Widget? child;
+
   /// A VoidCallback function to identify the functionality of the button. can be either null or () {}
   final VoidCallback? onPressed;
   final bool hasBackground;
@@ -24,17 +25,17 @@ class PrimaryButton extends StatefulWidget {
 class _PrimaryButtonState extends State<PrimaryButton> {
   @override
   Widget build(BuildContext context) {
-    var buttonHeight =56.0;
-return SizedBox(
-        width:  double.infinity ,
-        height: buttonHeight,
-        child: _getButton(context),
-      );
+    var buttonHeight = 56.0;
+    return SizedBox(
+      width: double.infinity,
+      height: buttonHeight,
+      child: _getButton(context),
+    );
   }
 
   ElevatedButton _getButton(BuildContext context) {
-     //TODO: change the background color based on device mode
-    var color =AppColors.textColorLight;
+    //TODO: change the background color based on device mode
+    var color = AppColors.textColorLight;
     Widget buildChild() {
       return Padding(
         padding: EdgeInsets.zero,
@@ -72,35 +73,32 @@ return SizedBox(
 
     return ElevatedButton(
       onPressed: widget.onPressed,
-  
       style: ButtonStyle(
         overlayColor: MaterialStateProperty.all(Colors.white30),
         elevation: MaterialStateProperty.all(0),
         padding: MaterialStateProperty.all(EdgeInsets.zero),
-        backgroundColor:widget.hasBackground? MaterialStateProperty.all(widget.onPressed != null
-            ? AppColors.primaryColor
-            : AppColors.primaryColor.withOpacity(0.4)):MaterialStateProperty.all(Colors.white),
+        backgroundColor: widget.hasBackground
+            ? MaterialStateProperty.all(widget.onPressed != null
+                ? AppColors.primaryColor
+                : AppColors.primaryColor.withOpacity(0.4))
+            : MaterialStateProperty.all(Colors.white),
         shape: MaterialStateProperty.all(
           RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-            side: BorderSide(color: widget.hasBackground?Colors.transparent:AppColors.primaryColor)
-          ),
-       
-    
+              borderRadius: BorderRadius.circular(8),
+              side: BorderSide(
+                  color: widget.hasBackground
+                      ? Colors.transparent
+                      : AppColors.primaryColor)),
         ),
       ),
       child: Ink(
-        width: double.infinity ,
+        width: double.infinity,
         height: double.infinity,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.transparent),
           borderRadius: BorderRadius.circular(8),
         ),
-        child: Center(
-          widthFactor: 1,
-          heightFactor: 1,
-          child: textWidget
-        ),
+        child: Center(widthFactor: 1, heightFactor: 1, child: textWidget),
       ),
     );
   }

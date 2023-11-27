@@ -1,10 +1,11 @@
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BookDetailsScreen extends StatelessWidget {
   final dynamic book;
 
-  BookDetailsScreen({required this.book});
+  const BookDetailsScreen({super.key, required this.book});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,6 @@ class BookDetailsScreen extends StatelessWidget {
       appBar: AppBar(
           surfaceTintColor: Colors.transparent,
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.white,
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
@@ -37,8 +37,8 @@ class BookDetailsScreen extends StatelessWidget {
                   },
                 ),
               ),
-              const Text(
-                "Book Details",
+              Text(
+                AppLocalizations.of(context)!.details,
               ),
               const Image(
                 image: AssetImage("assets/logo/logo_without_text_light.png"),
@@ -47,7 +47,6 @@ class BookDetailsScreen extends StatelessWidget {
               ),
             ],
           )),
-      backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
