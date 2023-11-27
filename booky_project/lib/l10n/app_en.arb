@@ -1,0 +1,17 @@
+{
+    "signup": "Sign Up",
+    "signin": "Sign In",
+    "createAccount": "Create an Account",
+    "fullName": "Full Name",
+    "nameError": "Name cannot be empty",
+    "email": "Email Address",
+    "emaileError": "Please enter a valid email",
+    "password": "Password",
+    "passwordError": "Please enter a valid password",
+    "search": "Search for a Book ...",
+    "startSearch": "Start searching for your book",
+    "details": "Book Details",
+    "settings": "Settings",
+    "dark": "Dark Mode",
+    "english": "English"
+}

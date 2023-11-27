@@ -9,6 +9,7 @@ class AppColors {
   static const Color inputBackgroundColorDark = Color(0xFF413F3F);
   static const Color textColorLight = Color(0xFF000000);
   static const Color textColorDark = Color(0xFFFFFFFF);
+  static const Color hintColorLight = Color(0xFFA39C9C);
   static const Color hintColorDark = Color(0xFFB7AAAA);
   static const Color subTitle = Color(0xFFA39C9C);
   static const Color errorColor = Color.fromARGB(255, 180, 24, 24);
