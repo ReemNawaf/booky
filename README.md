@@ -113,4 +113,8 @@ strokeWidth:  0.5,
 Awesome job! 🌟 I wanted to give you a big shoutout for your hard work – I'm seriously impressed!  keep it up 👏👏👏
 
 ***For your homework,*** let's save user data in Firebase Firestore. Check out this video guide for assistance: 😃
+<<<<<<< HEAD
 https://www.youtube.com/watch?v=4vKiJZNPhss&t=386s&ab_channel=HeyFlutter%E2%80%A4com
+=======
+https://www.youtube.com/watch?v=4vKiJZNPhss&t=386s&ab_channel=HeyFlutter%E2%80%A4com
+>>>>>>> b6b67fc4388c994ddeb7ee2d3564693266490c2c
