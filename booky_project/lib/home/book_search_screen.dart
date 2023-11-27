@@ -1,4 +1,3 @@
-
 import 'package:booky_project/styles/app_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -96,6 +95,9 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                   physics: NeverScrollableScrollPhysics(),
                   itemCount: 3,
                   itemBuilder: (context, index) {
+                    final book = _books[index];
+                    final volumeInfo = book['volumeInfo'];
+                    final imageLinks = volumeInfo['imageLinks'];
                     return ListTile(
                       title: const Text("Book Title"),
                       subtitle: const Text(
@@ -105,22 +107,19 @@ class _BookSearchScreenState extends State<BookSearchScreen> {
                       leading: Container(
                         width: 50,
                         height: 150,
-                        child:
-                        "link" != null
+                        child: "link" != null
                             ? ClipRRect(
                                 borderRadius: BorderRadius.circular(8.0),
                                 child: Image.network(
-                             'https://picsum.photos/250?image=9',
+                                  'https://picsum.photos/250?image=9',
                                 ),
                               )
                             : Container(),
                       ),
                       //TODO: go to book details page
-                      onTap: (){
-
-Navigator.of(context).push(MaterialPageRoute(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) => BookDetailsScreen()));
-
                       },
                     );
                   },
